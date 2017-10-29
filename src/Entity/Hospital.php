@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * Hospital
@@ -10,8 +11,13 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="hospital")
  * @ORM\Entity()
  */
-class Hospital
+class Hospital implements JsonSerializable
 {
+
+    const FIELD_NAME = 'name';
+    const FIELD_COUNTRY = 'country';
+    const FIELD_CITY = 'city';
+
     /**
      * @var int
      *
@@ -120,5 +126,17 @@ class Hospital
         $this->city = $city;
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize() : array
+    {
+        return [
+            self::FIELD_NAME => $this->name,
+            self::FIELD_CITY => $this->city,
+            self::FIELD_COUNTRY => $this->country
+        ];
     }
 }

@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 use JsonSerializable;
+use Proxies\__CG__\App\Entity\Hospital;
 
 /**
  * Appointment
@@ -15,6 +16,9 @@ use JsonSerializable;
 class Appointment implements JsonSerializable
 {
     const FIELD_ID = 'id';
+    const FIELD_APPOINTMENT_TIME = 'appointment_time';
+    const FIELD_HOSPITAL = 'hospital';
+    const FIELD_USER = 'user';
     const FIELD_CREATED_AT = 'created_at';
     const FIELD_UPDATED_AT = 'updated_at';
 
@@ -35,12 +39,16 @@ class Appointment implements JsonSerializable
     private $appointmentDatetime;
 
     /**
+     * @var Hospital
+     *
      * @ORM\ManyToOne(targetEntity="Hospital")
      * @ORM\JoinColumn(name="hospital_id", referencedColumnName="id")
      */
     private $hospital;
 
     /**
+     * @var User
+     *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
@@ -185,6 +193,9 @@ class Appointment implements JsonSerializable
     {
         return [
             self::FIELD_ID => $this->id,
+            self::FIELD_APPOINTMENT_TIME => $this->appointmentDatetime,
+            self::FIELD_HOSPITAL => $this->hospital,
+            self::FIELD_USER => $this->user,
             self::FIELD_CREATED_AT => $this->createdAt,
             self::FIELD_UPDATED_AT => $this->updatedAt
         ];

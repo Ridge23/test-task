@@ -2,15 +2,24 @@
 
 namespace App\Controller;
 
+use App\Entity\Appointment;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 /**
  * Class AppointmentController
  *
  * @package App\Controller
  */
-class AppointmentController
+class AppointmentController extends Controller
 {
-    public function __construct()
-    {
+    /**
+     * @return JsonResponse
+     */
+    public function getAction() : JsonResponse {
 
+        $appointments = $this->getDoctrine()->getRepository(Appointment::class)->findAll();
+
+        return new JsonResponse($appointments);
     }
 }

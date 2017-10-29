@@ -4,13 +4,17 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use JsonSerializable;
 
 /**
  * @ORM\Table(name="user")
  * @ORM\Entity()
  */
-class User implements UserInterface
+class User implements UserInterface, JsonSerializable
 {
+    const FIELD_EMAIL = 'email';
+    const FIELD_USERNAME = 'username';
+
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -127,5 +131,16 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize() : array
+    {
+        return [
+            self::FIELD_EMAIL => $this->email,
+            self::FIELD_USERNAME => $this->username
+        ];
     }
 }
