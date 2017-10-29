@@ -1,0 +1,44 @@
+version: "2"
+services:
+  php:
+    container_name: dt-php
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/var/www/dt
+      - ./docker/php/timezone.ini:/usr/local/etc/php/conf.d/timezone.ini
+    environment:
+      XDEBUG_CONFIG: remote_host=172.20.32.110
+      PHP_IDE_CONFIG: "serverName=dt.docker"
+    networks:
+      - dt-network
+
+  nginx:
+    container_name: dt-nginx
+    image: nginx:latest
+    ports:
+      - "81:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www/dt:cached
+      - ./docker/nginx/site.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - dt-network
+
+  mysql:
+    container_name: dt-mysql
+    image: mysql
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: dt
+      MYSQL_PASSWORD: dt
+      MYSQL_DATABASE: dt_db
+    networks:
+      - dt-network
+
+networks:
+  dt-network:
+    driver: bridge
