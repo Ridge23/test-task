@@ -5,15 +5,14 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 use JsonSerializable;
-use Proxies\__CG__\App\Entity\Hospital;
 
 /**
  * Appointment
  *
  * @ORM\Table(name="appointment")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="App\Repository\AppointmentRepository")
  */
-class Appointment implements JsonSerializable
+class Appointment extends AbstractLifetimeEntity implements JsonSerializable
 {
     const FIELD_ID = 'id';
     const FIELD_APPOINTMENT_TIME = 'appointment_time';
@@ -55,20 +54,6 @@ class Appointment implements JsonSerializable
     private $user;
 
     /**
-     * @var DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    private $createdAt;
-
-    /**
-     * @var DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime")
-     */
-    private $updatedAt;
-
-    /**
      * @return int
      */
     public function getId() : int
@@ -98,6 +83,7 @@ class Appointment implements JsonSerializable
 
     /**
      * @param DateTime $appointmentDatetime
+     *
      * @return Appointment
      */
     public function setAppointmentDatetime(DateTime $appointmentDatetime) : Appointment
@@ -142,46 +128,6 @@ class Appointment implements JsonSerializable
     public function setUser(User $user) : Appointment
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getCreatedAt() : DateTime
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param DateTime $createdAt
-     *
-     * @return Appointment
-     */
-    public function setCreatedAt(DateTime $createdAt) : Appointment
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getUpdatedAt() : DateTime
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * @param DateTime $updatedAt
-     *
-     * @return Appointment
-     */
-    public function setUpdatedAt(DateTime $updatedAt) : Appointment
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }
