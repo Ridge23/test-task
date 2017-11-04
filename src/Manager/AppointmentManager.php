@@ -2,6 +2,7 @@
 
 namespace App\Manager;
 
+use App\Repository\AppointmentRepository;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -14,21 +15,26 @@ class AppointmentManager
     /**
      * @var EntityManager
      */
-    protected $entityManager;
+    protected $appointmentRepository;
 
+    /**
+     * AppointmentManager constructor.
+     *
+     * @param AppointmentRepository $appointmentRepository
+     */
     public function __construct(
-        EntityManager $entityManager
+        AppointmentRepository $appointmentRepository
     ) {
-        $this->entityManager = $entityManager;
+        $this->appointmentRepository = $appointmentRepository;
     }
 
+    /**
+     * @param $userId
+     *
+     * @return array
+     */
     public function getAppointmentsByUser($userId)
     {
-
-    }
-
-    public function createAppointment()
-    {
-
+        return $this->appointmentRepository->findByUser($userId);
     }
 }
