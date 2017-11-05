@@ -3,7 +3,7 @@
 namespace App\Security;
 
 use App\Entity\User as UserEntity;
-use App\Repository\UserRepository;
+use App\Manager\UserManager;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -17,24 +17,33 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 class ApiKeyUserProvider implements UserProviderInterface
 {
     /**
-     * @var UserRepository
+     * @var UserManager
      */
-    private $userRepository;
+    private $userManager;
 
-    public function __construct(UserRepository $userRepository)
+    /**
+     * ApiKeyUserProvider constructor.
+     *
+     * @param UserManager $userManager
+     */
+    public function __construct(UserManager $userManager)
     {
-        $this->userRepository = $userRepository;
+        $this->userManager = $userManager;
     }
 
     /**
      * @param $apiKey
      *
-     * @return mixed
+     * @return string
      */
     public function getUsernameForApiKey($apiKey)
     {
         /** @var UserEntity $user */
-        $user = $this->userRepository->findByApiKey($apiKey);
+        $user = $this->userManager->getUserByApiKey($apiKey);
+
+        if (!$user) {
+            return '';
+        }
 
         return $user->getEmail();
     }

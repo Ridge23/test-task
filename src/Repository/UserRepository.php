@@ -18,6 +18,6 @@ class UserRepository extends EntityRepository
      */
     public function findByApiKey($apiKey = '')
     {
-        return $this->findBy(['apiKey' => $apiKey]);
+        return $this->findOneBy(['apiKey' => $apiKey]);
     }
 }

@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityManager;
 class AppointmentManager
 {
     /**
-     * @var EntityManager
+     * @var AppointmentRepository
      */
     protected $appointmentRepository;
 

@@ -96,7 +96,7 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface, Authentica
     /**
      * @param Request $request
      * @param AuthenticationException $exception
-     * 
+     *
      * @return Response
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)

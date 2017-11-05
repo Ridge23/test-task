@@ -35,7 +35,7 @@ services:
           - App\Entity\Appointment
 
     App\Repository\UserRepository:
-            class: Doctrine\ORM\EntityRepository
-            factory: ["@doctrine.orm.entity_manager", getRepository]
-            arguments:
-              - App\Entity\User
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+          - App\Entity\User
