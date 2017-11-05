@@ -43,6 +43,11 @@ class User implements UserInterface, JsonSerializable
     private $isActive;
 
     /**
+     * @ORM\Column(type="string", length=60, unique=true)
+     */
+    private $apiKey;
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -139,11 +144,27 @@ class User implements UserInterface, JsonSerializable
     }
 
     /**
+     * @return string
+     */
+    public function getApiKey()
+    {
+        return $this->apiKey;
+    }
+
+    /**
+     * @param string $apiKey
+     */
+    public function setApiKey($apiKey)
+    {
+        $this->apiKey = $apiKey;
+    }
+
+    /**
      * @return array
      */
     public function getRoles() : array
     {
-        return ['ROLE_USER'];
+        return ['ROLE_API'];
     }
 
     /**

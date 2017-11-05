@@ -25,6 +25,8 @@ class UsersFixture extends Fixture
         $encoder = $this->container->get('security.password_encoder');
         $password = $encoder->encodePassword($user, 'pass_1234');
         $user->setPassword($password);
+        $user->setApiKey('test_api_key_1');
+
         $this->addReference('test-user-1', $user);
 
         $manager->persist($user);
@@ -36,6 +38,7 @@ class UsersFixture extends Fixture
         $encoder = $this->container->get('security.password_encoder');
         $password = $encoder->encodePassword($user, 'pass_1234');
         $user->setPassword($password);
+        $user->setApiKey('test_api_key_2');
 
         $this->addReference('test-user-2', $user);
         $manager->persist($user);
