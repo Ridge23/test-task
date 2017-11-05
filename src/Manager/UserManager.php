@@ -3,6 +3,7 @@
 namespace App\Manager;
 
 use App\Repository\UserRepository;
+use App\Entity\User;
 
 /**
  * Class UserManager
@@ -24,6 +25,15 @@ class UserManager
     public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
+    }
+
+    /**
+     * @param string $email
+     *
+     * @return User|null
+     */
+    public function getUserByEmail($email = '') {
+        return $this->userRepository->findOneBy(['email' => $email]);
     }
 
     /**

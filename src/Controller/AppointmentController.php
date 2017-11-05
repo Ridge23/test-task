@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Manager\AppointmentManager;
+use App\Manager\UserManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,22 +21,28 @@ class AppointmentController extends Controller
     protected $appointmentManager;
 
     /**
+     * @var UserManager
+     */
+    protected $userManager;
+
+    /**
      * AppointmentController constructor.
      *
      * @param AppointmentManager $appointmentManager
+     * @param UserManager $userManager
      */
-    public function __construct(AppointmentManager $appointmentManager)
+    public function __construct(AppointmentManager $appointmentManager, UserManager $userManager)
     {
         $this->appointmentManager = $appointmentManager;
+        $this->userManager = $userManager;
     }
 
     /**
-     * @param Request $request
-     *
      * @return JsonResponse
      */
-    public function getAction(Request $request) : JsonResponse {
-        $appointments = $this->appointmentManager->getAppointmentsByUser(13);
+    public function getAction() : JsonResponse {
+        $user = $this->userManager->getUserByEmail($this->getUser()->getUsername());
+        $appointments = $this->appointmentManager->getAppointmentsByUser($user->getId());
 
         return new JsonResponse($appointments);
     }
