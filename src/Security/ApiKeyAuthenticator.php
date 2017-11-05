@@ -3,12 +3,15 @@
 namespace App\Security;
 
 use Symfony\Component\Security\Http\Authentication\SimplePreAuthenticatorInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\HttpFoundation\Response;
 use \InvalidArgumentException;
 
 /**
@@ -16,7 +19,7 @@ use \InvalidArgumentException;
  *
  * @package App\Security
  */
-class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
+class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface, AuthenticationFailureHandlerInterface
 {
     /**
      * @param Request $request
@@ -87,6 +90,20 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
             $apiKey,
             $providerKey,
             $user->getRoles()
+        );
+    }
+
+    /**
+     * @param Request $request
+     * @param AuthenticationException $exception
+     * 
+     * @return Response
+     */
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    {
+        return new Response(
+            strtr($exception->getMessageKey(), $exception->getMessageData()),
+            401
         );
     }
 }
