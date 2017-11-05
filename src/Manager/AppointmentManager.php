@@ -61,8 +61,18 @@ class AppointmentManager
      *
      * @return array
      */
-    public function getAppointmentsByUser($userId)
+    public function getAppointmentsByUser($userId) : array
     {
         return $this->appointmentRepository->findByUser($userId);
+    }
+
+    /**
+     * @param $id
+     *
+     * @return Appointment|null
+     */
+    public function getAppointmentById($id)
+    {
+        return $this->appointmentRepository->find($id);
     }
 }

@@ -1,6 +1,11 @@
 getAppointments:
   path: /api/appointments/
-  defaults: { _controller: 'App\Controller\AppointmentController::getAction' }
+  defaults: { _controller: 'App\Controller\AppointmentController::getAllAction' }
+  methods: [GET]
+
+getAppointment:
+  path: /api/appointments/{id}
+  defaults:  { _controller: 'App\Controller\AppointmentController::getAction' }
   methods: [GET]
 
 createAppointment:
@@ -9,7 +14,7 @@ createAppointment:
   methods: [POST]
 
 deleteAppointment:
-  path: /api/appointments/
+  path: /api/appointments/{id}
   defaults: { _controller: 'App\Controller\AppointmentController::deleteAction' }
   methods: [DELETE]
 

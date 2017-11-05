@@ -52,12 +52,24 @@ class AppointmentController extends Controller
     /**
      * @return JsonResponse
      */
-    public function getAction() : JsonResponse
+    public function getAllAction() : JsonResponse
     {
         $user = $this->getUserEntity();
         $appointments = $this->appointmentManager->getAppointmentsByUser($user->getId());
 
         return new JsonResponse($appointments);
+    }
+
+    /**
+     * @param $id
+     *
+     * @return JsonResponse
+     */
+    public function getAction($id) : JsonResponse
+    {
+        $appointment = $this->appointmentManager->getAppointmentById($id);
+
+        return new JsonResponse($appointment);
     }
 
     /**
