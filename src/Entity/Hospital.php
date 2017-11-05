@@ -9,7 +9,7 @@ use JsonSerializable;
  * Hospital
  *
  * @ORM\Table(name="hospital")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="App\Repository\HospitalRepository")
  */
 class Hospital implements JsonSerializable
 {

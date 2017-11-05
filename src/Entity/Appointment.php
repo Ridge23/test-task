@@ -11,6 +11,7 @@ use JsonSerializable;
  *
  * @ORM\Table(name="appointment")
  * @ORM\Entity(repositoryClass="App\Repository\AppointmentRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Appointment extends AbstractLifetimeEntity implements JsonSerializable
 {
