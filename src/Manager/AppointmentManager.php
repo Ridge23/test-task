@@ -9,6 +9,7 @@ use App\Repository\AppointmentRepository;
 use Doctrine\ORM\EntityManager;
 use App\Entity\User;
 use DateTime;
+use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * Class AppointmentManager
@@ -39,17 +40,17 @@ class AppointmentManager
     /**
      * @param User $user
      * @param Hospital $hospital
-     * @param DateTime $dateTime
+     * @param string $dateTime
      *
      * @return Appointment
      */
-    public function createAppointment(User $user, Hospital $hospital, DateTime $dateTime)
+    public function createAppointment(User $user, Hospital $hospital, $dateTime = '')
     {
         $appointment = new Appointment();
 
         $appointment->setUser($user);
         $appointment->setHospital($hospital);
-        $appointment->setAppointmentDatetime($dateTime);
+        $appointment->setAppointmentDatetime(new DateTime($dateTime));
 
         $this->entityManager->persist($appointment);
         $this->entityManager->flush();
@@ -81,11 +82,11 @@ class AppointmentManager
      * @param int $id
      * @param User $user
      * @param Hospital $hospital
-     * @param DateTime $dateTime
+     * @param string $dateTime
      * @return Appointment|null
      * @throws ApplicationUserMismatchException
      */
-    public function updateAppointment($id = 0, User $user, Hospital $hospital, DateTime $dateTime)
+    public function updateAppointment($id = 0, User $user, Hospital $hospital, $dateTime = '')
     {
         $appointment = $this->getAppointmentById($id);
 
@@ -93,7 +94,7 @@ class AppointmentManager
             throw new ApplicationUserMismatchException();
         } else {
             $appointment->setHospital($hospital);
-            $appointment->setAppointmentDatetime($dateTime);
+            $appointment->setAppointmentDatetime(new DateTime($dateTime));
 
             $this->entityManager->persist($appointment);
             $this->entityManager->flush();

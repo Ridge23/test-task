@@ -87,9 +87,7 @@ class AppointmentController extends Controller
 
         $user = $this->getUserEntity();
         $hospital = $this->hospitalManager->getById($appointmentData['hospital_id']);
-        $dateTime = new DateTime($appointmentData['appointment_time']);
-
-        $appointment = $this->appointmentManager->createAppointment($user, $hospital, $dateTime);
+        $appointment = $this->appointmentManager->createAppointment($user, $hospital, $appointmentData['appointment_time']);
 
         return new JsonResponse($appointment);
     }
@@ -104,15 +102,14 @@ class AppointmentController extends Controller
     {
         $status = Response::HTTP_OK;
         $message = '';
-        
+
         $appointmentData = json_decode($request->getContent(), true);
 
         $user = $this->getUserEntity();
         $hospital = $this->hospitalManager->getById($appointmentData['hospital_id']);
-        $dateTime = new DateTime($appointmentData['appointment_time']);
 
         try {
-            $this->appointmentManager->updateAppointment($id, $user, $hospital, $dateTime);
+            $this->appointmentManager->updateAppointment($id, $user, $hospital, $appointmentData['appointment_time']);
         } catch (Exception $e) {
             $status = Response::HTTP_INTERNAL_SERVER_ERROR;
             $message = $e->getMessage();
