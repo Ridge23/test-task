@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use DateTime;
+use Exception;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class AppointmentController
@@ -54,10 +56,11 @@ class AppointmentController extends Controller
      */
     public function getAllAction() : JsonResponse
     {
+        $status = Response::HTTP_OK;
         $user = $this->getUserEntity();
         $appointments = $this->appointmentManager->getAppointmentsByUser($user->getId());
 
-        return new JsonResponse($appointments);
+        return new JsonResponse($appointments, $status);
     }
 
     /**
@@ -99,11 +102,28 @@ class AppointmentController extends Controller
     }
 
     /**
+     * @param $id
+     * 
      * @return JsonResponse
      */
-    public function deleteAction() : JsonResponse
+    public function deleteAction($id) : JsonResponse
     {
-        return new JsonResponse();
+        $status = Response::HTTP_OK;
+        $message = '';
+
+        $user = $this->getUserEntity();
+        $appointment = $this->appointmentManager->getAppointmentById($id);
+
+        if ($appointment->getUser() === $user) {
+            try {
+                $this->appointmentManager->deleteAppointment($appointment);
+            } catch (Exception $e) {
+                $status = Response::HTTP_INTERNAL_SERVER_ERROR;
+                $message = $e->getMessage();
+            }
+        }
+
+        return new JsonResponse($message, $status);
     }
 
     protected function getUserEntity()

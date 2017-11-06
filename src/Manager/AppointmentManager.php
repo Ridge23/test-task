@@ -75,4 +75,12 @@ class AppointmentManager
     {
         return $this->appointmentRepository->find($id);
     }
+
+    /**
+     * @param $appointment
+     */
+    public function deleteAppointment($appointment)
+    {
+        $this->entityManager->remove($appointment);
+    }
 }
