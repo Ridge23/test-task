@@ -8,9 +8,10 @@ use App\Manager\UserManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use App\Entity\User;
 use DateTime;
 use Exception;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class AppointmentController
@@ -94,16 +95,35 @@ class AppointmentController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @param int $id
+     *
      * @return JsonResponse
      */
-    public function updateAction() : JsonResponse
+    public function updateAction(Request $request, $id) : JsonResponse
     {
-        return new JsonResponse();
+        $status = Response::HTTP_OK;
+        $message = '';
+        
+        $appointmentData = json_decode($request->getContent(), true);
+
+        $user = $this->getUserEntity();
+        $hospital = $this->hospitalManager->getById($appointmentData['hospital_id']);
+        $dateTime = new DateTime($appointmentData['appointment_time']);
+
+        try {
+            $this->appointmentManager->updateAppointment($id, $user, $hospital, $dateTime);
+        } catch (Exception $e) {
+            $status = Response::HTTP_INTERNAL_SERVER_ERROR;
+            $message = $e->getMessage();
+        }
+
+        return new JsonResponse($message, $status);
     }
 
     /**
-     * @param $id
-     * 
+     * @param int $id
+     *
      * @return JsonResponse
      */
     public function deleteAction($id) : JsonResponse
@@ -112,20 +132,20 @@ class AppointmentController extends Controller
         $message = '';
 
         $user = $this->getUserEntity();
-        $appointment = $this->appointmentManager->getAppointmentById($id);
 
-        if ($appointment->getUser() === $user) {
-            try {
-                $this->appointmentManager->deleteAppointment($appointment);
-            } catch (Exception $e) {
-                $status = Response::HTTP_INTERNAL_SERVER_ERROR;
-                $message = $e->getMessage();
-            }
+        try {
+            $this->appointmentManager->deleteAppointment($id, $user);
+        } catch (Exception $e) {
+            $status = Response::HTTP_INTERNAL_SERVER_ERROR;
+            $message = $e->getMessage();
         }
 
         return new JsonResponse($message, $status);
     }
 
+    /**
+     * @return User|null
+     */
     protected function getUserEntity()
     {
         return $this->userManager->getUserByEmail($this->getUser()->getUsername());

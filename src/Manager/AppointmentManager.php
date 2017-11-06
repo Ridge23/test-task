@@ -4,6 +4,7 @@ namespace App\Manager;
 
 use App\Entity\Appointment;
 use App\Entity\Hospital;
+use App\Exception\ApplicationUserMismatchException;
 use App\Repository\AppointmentRepository;
 use Doctrine\ORM\EntityManager;
 use App\Entity\User;
@@ -57,7 +58,7 @@ class AppointmentManager
     }
 
     /**
-     * @param $userId
+     * @param int $userId
      *
      * @return array
      */
@@ -67,7 +68,7 @@ class AppointmentManager
     }
 
     /**
-     * @param $id
+     * @param int $id
      *
      * @return Appointment|null
      */
@@ -77,10 +78,43 @@ class AppointmentManager
     }
 
     /**
-     * @param $appointment
+     * @param int $id
+     * @param User $user
+     * @param Hospital $hospital
+     * @param DateTime $dateTime
+     * @return Appointment|null
+     * @throws ApplicationUserMismatchException
      */
-    public function deleteAppointment($appointment)
+    public function updateAppointment($id = 0, User $user, Hospital $hospital, DateTime $dateTime)
     {
-        $this->entityManager->remove($appointment);
+        $appointment = $this->getAppointmentById($id);
+
+        if ($appointment->getUser() !== $user) {
+            throw new ApplicationUserMismatchException();
+        } else {
+            $appointment->setHospital($hospital);
+            $appointment->setAppointmentDatetime($dateTime);
+
+            $this->entityManager->persist($appointment);
+            $this->entityManager->flush();
+
+            return $appointment;
+        }
+    }
+
+    /**
+     * @param $appointmentId
+     * @param User $user
+     * @throws ApplicationUserMismatchException
+     */
+    public function deleteAppointment($appointmentId, User $user)
+    {
+        $appointment = $this->getAppointmentById($appointmentId);
+
+        if ($appointment->getUser() !== $user) {
+            throw new ApplicationUserMismatchException();
+        } else {
+            $this->entityManager->remove($appointment);
+        }
     }
 }

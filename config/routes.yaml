@@ -13,17 +13,12 @@ createAppointment:
   defaults: { _controller: 'App\Controller\AppointmentController::createAction' }
   methods: [POST]
 
+updateAppointment:
+  path: /api/appointments/{id}
+  defaults: { _controller: 'App\Controller\AppointmentController::updateAction' }
+  methods: [PUT]
+
 deleteAppointment:
   path: /api/appointments/{id}
   defaults: { _controller: 'App\Controller\AppointmentController::deleteAction' }
   methods: [DELETE]
-
-
-#index:
-#    path: /
-#    defaults: { _controller: 'App\Controller\DefaultController::index' }
-
-# first, run composer req annotations
-#controllers:
-#    resource: ../src/Controller/
-#    type: annotation
