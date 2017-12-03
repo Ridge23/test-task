@@ -92,7 +92,9 @@ class AppointmentManager
      * @param User $user
      * @param Hospital $hospital
      * @param string $dateTime
+     *
      * @return Appointment|null
+     *
      * @throws ApplicationUserMismatchException
      */
     public function updateAppointment($id = 0, User $user, Hospital $hospital, $dateTime = '')
@@ -113,8 +115,9 @@ class AppointmentManager
     }
 
     /**
-     * @param $appointmentId
+     * @param int $appointmentId
      * @param User $user
+     *
      * @throws ApplicationUserMismatchException
      */
     public function deleteAppointment($appointmentId, User $user)
