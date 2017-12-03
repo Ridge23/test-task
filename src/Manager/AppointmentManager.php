@@ -7,11 +7,9 @@ use App\Entity\Appointment;
 use App\Entity\Hospital;
 use App\Exception\ApplicationUserMismatchException;
 use App\Repository\AppointmentRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
 use DateTime;
-use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * Class AppointmentManager
