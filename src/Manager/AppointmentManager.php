@@ -72,7 +72,7 @@ class AppointmentManager
      *
      * @return array
      */
-    public function getAppointmentsByUser($userId) : array
+    public function getAppointmentsByUser($userId = 0) : array
     {
         return $this->appointmentRepository->findByUser($userId);
     }
@@ -82,7 +82,7 @@ class AppointmentManager
      *
      * @return Appointment|null
      */
-    public function getAppointmentById($id)
+    public function getAppointmentById($id = 0)
     {
         return $this->appointmentRepository->find($id);
     }

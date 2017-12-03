@@ -78,6 +78,27 @@ class AppointmentManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers AppointmentManager::getAppointmentsByUser()
+     */
+    public function testGetAppointmentsByUser()
+    {
+        /** @var AppointmentRepository|PHPUnit_Framework_MockObject_MockObject $appointmentRepositoryMock */
+        $appointmentRepositoryMock = $this->createEmptyMock(AppointmentRepository::class);
+        $appointmentRepositoryMock->expects($this->once())
+                                  ->method('findByUser')
+                                  ->with(250)
+                                  ->willReturn(['some_array']);
+
+        $appointmentManager = $this->createMockedAppointmentManager(
+            [
+                AppointmentRepository::class => $appointmentRepositoryMock
+            ]
+        );
+
+        $this->assertSame(['some_array'], $appointmentManager->getAppointmentsByUser(250));
+    }
+
+    /**
      * @param array $mockedDependencies
      *
      * @return AppointmentManager
