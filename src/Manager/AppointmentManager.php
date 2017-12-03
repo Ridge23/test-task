@@ -2,6 +2,7 @@
 
 namespace App\Manager;
 
+use App\Builder\AppointmentEntityBuilder;
 use App\Entity\Appointment;
 use App\Entity\Hospital;
 use App\Exception\ApplicationUserMismatchException;
@@ -24,17 +25,25 @@ class AppointmentManager
     protected $appointmentRepository;
 
     /**
+     * @var AppointmentEntityBuilder
+     */
+    protected $appointmentEntityBuilder;
+
+    /**
      * AppointmentManager constructor.
      *
      * @param AppointmentRepository $appointmentRepository
+     * @param AppointmentEntityBuilder $appointmentEntityBuilder
      * @param EntityManager $entityManager
      */
     public function __construct(
         AppointmentRepository $appointmentRepository,
+        AppointmentEntityBuilder $appointmentEntityBuilder,
         EntityManager $entityManager
     ) {
         $this->appointmentRepository = $appointmentRepository;
         $this->entityManager = $entityManager;
+        $this->appointmentEntityBuilder = $appointmentEntityBuilder;
     }
 
     /**
@@ -46,11 +55,7 @@ class AppointmentManager
      */
     public function createAppointment(User $user, Hospital $hospital, $dateTime = '')
     {
-        $appointment = new Appointment();
-
-        $appointment->setUser($user);
-        $appointment->setHospital($hospital);
-        $appointment->setAppointmentDatetime(new DateTime($dateTime));
+        $appointment = $this->appointmentEntityBuilder->build($user, $hospital, $dateTime);
 
         $this->entityManager->persist($appointment);
         $this->entityManager->flush();
