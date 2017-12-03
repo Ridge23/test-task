@@ -8,6 +8,7 @@ use App\Entity\Hospital;
 use App\Exception\ApplicationUserMismatchException;
 use App\Repository\AppointmentRepository;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
 use DateTime;
 use Symfony\Component\Validator\Constraints\Date;
@@ -30,16 +31,21 @@ class AppointmentManager
     protected $appointmentEntityBuilder;
 
     /**
+     * @var EntityManagerInterface
+     */
+    protected $entityManager;
+
+    /**
      * AppointmentManager constructor.
      *
      * @param AppointmentRepository $appointmentRepository
      * @param AppointmentEntityBuilder $appointmentEntityBuilder
-     * @param EntityManager $entityManager
+     * @param EntityManagerInterface $entityManager
      */
     public function __construct(
         AppointmentRepository $appointmentRepository,
         AppointmentEntityBuilder $appointmentEntityBuilder,
-        EntityManager $entityManager
+        EntityManagerInterface $entityManager
     ) {
         $this->appointmentRepository = $appointmentRepository;
         $this->entityManager = $entityManager;
