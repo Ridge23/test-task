@@ -57,4 +57,46 @@ class AppointmentsCest
             ]
         );
     }
+
+    /**
+     * @param ApiTester $I
+     */
+    public function testGetSingleAppointment(ApiTester $I)
+    {
+        $I->wantTo("Test getting of singe appointment");
+
+        $I->sendGet('appointments/1');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+
+        $I->seeResponseMatchesJsonType(
+            [
+                'id' => 'integer',
+                'appointment_time' => [
+                    'date' => 'string',
+                    'timezone_type' => 'integer',
+                    'timezone' => 'string'
+                ],
+                'hospital' => [
+                    'name' => 'string',
+                    'city' => 'string',
+                    'country' => 'string'
+                ],
+                'user' => [
+                    'email' => 'string',
+                    'username' => 'string'
+                ],
+                'created_at' => [
+                    'date' => 'string',
+                    'timezone_type' => 'integer',
+                    'timezone' => 'string'
+                ],
+                'updated_at' => [
+                    'date' => 'string',
+                    'timezone_type' => 'integer',
+                    'timezone' => 'string'
+                ]
+            ]
+        );
+    }
 }
